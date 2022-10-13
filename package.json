@@ -1,0 +1,36 @@
+{
+  "name": "backend-application",
+  "version": "1.0.0",
+  "description": "Курсовая работа 4 семестр",
+  "scripts": {
+    "start": "ts-node ./src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nadezhdakuzmina/Backend-Application.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nadezhdakuzmina/Backend-Application/issues"
+  },
+  "homepage": "https://github.com/nadezhdakuzmina/Backend-Application#readme",
+  "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/md5": "^2.3.2",
+    "@types/node": "^17.0.23",
+    "ts-node": "^10.7.0",
+    "tsconfig-paths": "^3.14.1",
+    "typescript": "^4.6.3"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "md5": "^2.3.0",
+    "pg": "^8.7.3",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.3.6"
+  }
+}

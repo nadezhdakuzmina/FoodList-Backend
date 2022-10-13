@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "allowJs": true,
+    "checkJs": false,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "downlevelIteration": true,
+    "emitDecoratorMetadata": true,
+    "paths": {
+      "@constants": ["./src/constants.ts"],
+      "@types": ["./src/types.ts"]
+    }
+  },
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
+}
