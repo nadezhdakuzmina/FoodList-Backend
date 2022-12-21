@@ -9,8 +9,11 @@ export class FrigeItem {
   @Column()
   name: string;
 
-  @Column()
-  expires: string;
+  @Column({ type: 'bigint', nullable: true })
+  expires: number;
+
+  @Column({ default: false, nullable: true })
+  hasBeenAddedToCart: boolean;
 
   @Column()
   foodType: string;

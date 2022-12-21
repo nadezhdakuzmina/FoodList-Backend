@@ -1,3 +1,13 @@
+import path from 'path';
+import { readEnv, applyToEnv } from './utils/env';
+
+export const CORE_PATH = path.resolve(__dirname, '..');
+
+if (process.env.MODE === 'dev') {
+  const envDevPath = `${CORE_PATH}/.env.dev`;
+  applyToEnv(readEnv(envDevPath));
+}
+
 export const PORT = 3001;
 export const SECRET = process.env.SECRET;
 

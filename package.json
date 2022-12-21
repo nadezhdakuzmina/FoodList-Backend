@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Курсовая работа 4 семестр",
   "scripts": {
-    "start": "ts-node ./src/index.ts"
+    "start": "MODE=dev ts-node ./src/index.ts"
   },
   "repository": {
     "type": "git",

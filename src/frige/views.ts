@@ -13,7 +13,7 @@ export const addItem = async (req: Request, res: Response, sourseData: DataSourc
   } = req.body;
 
   if (!name || !expires || !foodType) {
-    res.json({
+    res.status(400).json({
       error: '`name`, `foodType` and `expires` expacted',
     });
 
@@ -21,7 +21,7 @@ export const addItem = async (req: Request, res: Response, sourseData: DataSourc
   }
 
   if (isNaN(Number(expires))) {
-    res.json({
+    res.status(400).json({
       error: 'invalid expires date, should be integer',
     });
 
@@ -32,7 +32,7 @@ export const addItem = async (req: Request, res: Response, sourseData: DataSourc
 
   const frigeItem = new FrigeItem();
   frigeItem.name = name;
-  frigeItem.expires = String(parseInt(expires, 10));
+  frigeItem.expires = parseInt(expires, 10);
   frigeItem.user = user;
   frigeItem.foodType = foodType;
 
@@ -53,7 +53,7 @@ export const deleteItem = async (req: Request, res: Response, sourseData: DataSo
   const frigeItem = await sourseData.manager.findOneBy(FrigeItem, { user, id });
 
   if (!frigeItem) {
-    res.json({
+    res.status(400).json({
       error: `couldn't find such item with id='${id}'`,
     });
 

@@ -14,7 +14,7 @@ export const createUser = async (req: Request, res: Response, sourseData: DataSo
   } = req.body;
 
   if (!username || !email || !password) {
-    res.json({
+    res.status(400).json({
       error: '`username`, `email` and `password` expacted',
     });
 
@@ -27,7 +27,7 @@ export const createUser = async (req: Request, res: Response, sourseData: DataSo
   user.password = md5(password + SECRET);
 
   if (await sourseData.manager.findOneBy(User, { email })) {
-    res.json({
+    res.status(400).json({
       error: 'such email already exists',
     });
 
@@ -35,7 +35,7 @@ export const createUser = async (req: Request, res: Response, sourseData: DataSo
   }
 
   if (await sourseData.manager.findOneBy(User, { username })) {
-    res.json({
+    res.status(400).json({
       error: 'This username taken',
     });
 
@@ -60,7 +60,7 @@ export const auth = async (req: Request, res: Response, sourseData: DataSource) 
   const user = await sourseData.manager.findOneBy(User, { username, email });
 
   if (!user) {
-    res.json({
+    res.status(400).json({
       error: 'no such user exists',
     });
 
@@ -70,7 +70,7 @@ export const auth = async (req: Request, res: Response, sourseData: DataSource) 
   const passwordHash = md5(password + SECRET);
 
   if (passwordHash !== user.password) {
-    res.json({
+    res.status(400).json({
       error: 'invalid password',
     });
 
@@ -84,16 +84,16 @@ export const auth = async (req: Request, res: Response, sourseData: DataSource) 
   user.tokenExpires = tokenExpires;
   await sourseData.manager.save(user);
 
+  res.setHeader('Set-Cookie', `user_token=${token}`);
   res.json({ token });
 };
 
 export const checkAuth = async (req: Request, res: Response, sourseData: DataSource) => {
-  const {
-    token,
-  } = req.body;
+  const cookieToken = req.headers.cookie?.match(/user_token=([a-zA-Z0-9]+)/)?.[1];
+  const token = (req.query.token || cookieToken) as string;
 
   if (!token) {
-    res.json({
+    res.status(400).json({
       error: 'token is requied',
     });
 
@@ -103,7 +103,7 @@ export const checkAuth = async (req: Request, res: Response, sourseData: DataSou
   const user = await sourseData.manager.findOneBy(User, { token });
 
   if (!user) {
-    res.json({
+    res.status(400).json({
       error: 'invalid token',
     });
 
@@ -113,14 +113,22 @@ export const checkAuth = async (req: Request, res: Response, sourseData: DataSou
   const expires = parseInt(user.tokenExpires, 10);
   
   if (Date.now() > expires) {
-    res.json({
+    res.status(400).json({
       error: 'token expired',
     });
 
     return;
   }
 
+  res.setHeader('Set-Cookie', `user_token=${token}`);
   res.json({
-    message: 'success',
+    token,
   });
+};
+
+export const logout = async (req: Request, res: Response, sourseData: DataSource) => {
+  res.setHeader('Set-Cookie', 'user_token=;');
+  res.json({
+    message: 'successfuly logged out',
+  })
 };

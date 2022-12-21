@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import express from 'express';
-import cors from 'cors';
 import bodyParser from 'body-parser';
 
 import User from 'src/user';
@@ -19,6 +18,7 @@ import {
   DB_PASSWORD,
   DB_USER,
 } from '@constants';
+import { preflightAdapter } from './helpers';
 
 export const app = express();
 
@@ -37,9 +37,10 @@ export const AppDataSource = new DataSource({
 
 AppDataSource.initialize()
   .then((connection) => app.listen(PORT, () => {
+    preflightAdapter(app);
     app.use(bodyParser.json());
-    app.use(cors())
     app.use(mainRouter(connection));
+
     console.log(`Application listening on port ${PORT}`);
   }))
   .catch((error) => console.log(error));

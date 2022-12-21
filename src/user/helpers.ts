@@ -6,19 +6,21 @@ import type { Request, Response } from 'express';
 
 export const authWrapper = (func: EndpointView): EndpointView => {
   return async (req: Request, res: Response, sourseData: DataSource) => {
-    let token: string;
-    if (req.method === 'POST') {
-      token = req.body.token;
-    } else if (req.method === 'GET') {
-      token = req.query.token as string;
-    } else {
-      res.json({
-        error: 'invalid method',
-      });
+    let token: string = req.headers.cookie?.match(/user_token=([a-zA-Z0-9]+)/)?.[1];
 
-      return;
+    if (!token) {
+      if (req.method === 'POST') {
+        token = req.body.token;
+      } else if (req.method === 'GET') {
+        token = req.query.token as string;
+      } else {
+        res.json({
+          error: 'invalid method',
+        });
+
+        return;
+      }
     }
-
 
     if (!token) {
       res.json({

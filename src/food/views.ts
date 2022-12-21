@@ -16,7 +16,7 @@ export const addFood = async (req: Request, res: Response, sourseData: DataSourc
   food.category = category;
 
   if (await sourseData.manager.findOneBy(Food, { foodname })) {
-    res.json({
+    res.status(400).json({
       error: 'such food already exists',
     });
 
@@ -31,7 +31,7 @@ export const addFood = async (req: Request, res: Response, sourseData: DataSourc
       userID: addFood.id,
     });
   } catch(error) {
-    res.json({
+    res.status(400).json({
       error: 'unexpacted error',
     });
   }
@@ -49,7 +49,7 @@ export const deleteFood = async (req: Request, res: Response, sourseData: DataSo
   const foodname = req.query.foodname as string;
 
   if (foodname === undefined) {
-    res.json({
+    res.status(400).json({
       error: 'invalid food',
     });
 
@@ -59,7 +59,7 @@ export const deleteFood = async (req: Request, res: Response, sourseData: DataSo
   const findFood = await sourseData.manager.findOneBy(Food, { foodname });
 
   if (!findFood) {
-    res.json({
+    res.status(400).json({
       error: 'no such food exists',
     });
 
@@ -72,7 +72,7 @@ export const getFood = async (req: Request, res: Response, sourseData: DataSourc
   const foodname = req.query.foodname as string;
 
   if (foodname === undefined) {
-    res.json({
+    res.status(400).json({
       error: 'invalid food',
     });
 
@@ -82,7 +82,7 @@ export const getFood = async (req: Request, res: Response, sourseData: DataSourc
   const findFood = await sourseData.manager.findOneBy(Food, { foodname });
 
   if (!findFood) {
-    res.json({
+    res.status(400).json({
       error: 'no such user exists',
     });
 
